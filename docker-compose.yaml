@@ -1,0 +1,22 @@
+version: "2"
+services:
+    namenode:
+        build: ./api
+        hostname: namenode
+        ports:
+            - 9870:9870
+            - 5000:5000
+        env_file:
+            - ./config
+        environment:
+            ENSURE_NAMENODE_DIR: "/tmp/hadoop-root/dfs/name"
+    datanode1:
+        image: apache/hadoop:3
+        command: ["hdfs", "datanode"]
+        env_file:
+            - ./config
+    datanode2:
+        image: apache/hadoop:3
+        command: ["hdfs", "datanode"]
+        env_file:
+            - ./config
