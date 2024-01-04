@@ -57,7 +57,7 @@ def put_stocks():
 def get_list_file(path):
     if request.method == 'GET':
         hdfs_path = path
-        process = Popen(f'hdfs dfs -ls -h {hdfs_path}', shell=True, stdout=PIPE, stderr=PIPE)
+        process = Popen(f'hdfs dfs -ls /{hdfs_path}', shell=True, stdout=PIPE, stderr=PIPE)
         std_out, std_err = process.communicate()
         list_of_file_names = [fn.split(' ')[-1].split('/')[-1] for fn in std_out.decode().split('\n')[1:]][:-1]
-        return list_of_file_names        
+        return {"file_names":list_of_file_names}       
