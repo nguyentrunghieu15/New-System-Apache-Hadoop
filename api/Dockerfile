@@ -11,7 +11,7 @@ RUN scl enable rh-python36 bash && sudo /opt/rh/rh-python36/root/usr/bin/pip ins
 
 COPY . .
 RUN scl enable rh-python36 bash && pip install -r requirements.txt
-EXPOSE 5000 9870
+EXPOSE 5000 9870 8020
 
 # Set environment variables, if needed
 ENV LC_ALL=en_US.utf8
