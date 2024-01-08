@@ -1,2 +1,2 @@
 sudo docker compose down
-sudo docker rmi hdfs_service-namenode
+sudo docker rmi hadoop-mongo-namenode

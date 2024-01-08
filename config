@@ -1,5 +1,5 @@
 CORE-SITE.XML_fs.defaultFS=hdfs://namenode
-HDFS-SITE.XML_dfs.replication=2
+HDFS-SITE.XML_dfs.replication=3
 HDFS-SITE.XML_dfs.namenode.name.dir=/data/hadoop/hdfs/nn
 HDFS-SITE.XML_fs.checkpoint.dir=/data/hadoop/hdfs/snn
 HDFS-SITE.XML_fs.checkpoint.edits.dir=/data/hadoop/hdfs/snn

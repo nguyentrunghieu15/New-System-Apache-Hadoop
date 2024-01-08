@@ -1,13 +1,8 @@
-version: "2"
-networks:
-  my_network:
-    driver: bridge
+version: "3"
 services:
     namenode:
         build: ./api
         hostname: namenode
-        networks:
-            - my_network
         ports:
             - 9870:9870
             - 5000:5000
@@ -18,78 +13,40 @@ services:
             ENSURE_NAMENODE_DIR: "/tmp/hadoop-root/dfs/name"
     datanode1:
         image: apache/hadoop:3
-        networks:
-            - my_network
         command: ["hdfs", "datanode"]
         env_file:
             - ./config
     datanode2:
         image: apache/hadoop:3
-        networks:
-            - my_network
         command: ["hdfs", "datanode"]
         env_file:
             - ./config
     resourcemanager:
         image: apache/hadoop:3
-        networks:
-            - my_network
         hostname: resourcemanager
         command: ["yarn", "resourcemanager"]
         ports:
             - 8088:8088
         env_file:
             - ./config
-        volumes:
-            - ./test.sh:/opt/test.sh
     nodemanager:
         image: apache/hadoop:3
-        networks:
-            - my_network
         command: ["yarn", "nodemanager"]
         env_file:
             - ./config
-    spark:
-        image: docker.io/bitnami/spark:3.5
-        networks:
-            - my_network
-        environment:
-            - SPARK_MODE=master
-            - SPARK_RPC_AUTHENTICATION_ENABLED=no
-            - SPARK_RPC_ENCRYPTION_ENABLED=no
-            - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
-            - SPARK_SSL_ENABLED=no
-            - SPARK_USER=spark
+    mongo:
+        image: mongo
         ports:
-            - "8080:8080"
-            - "7077:7077"
-        volumes:
-            - ./app/Service:/Service
-    spark-worker1:
-        image: docker.io/bitnami/spark:3.5
-        networks:
-            - my_network
+            - 27017:27017
         environment:
-            - SPARK_MODE=worker
-            - SPARK_MASTER_URL=spark://spark:7077
-            - SPARK_WORKER_MEMORY=1G
-            - SPARK_WORKER_CORES=1
-            - SPARK_RPC_AUTHENTICATION_ENABLED=no
-            - SPARK_RPC_ENCRYPTION_ENABLED=no
-            - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
-            - SPARK_SSL_ENABLED=no
-            - SPARK_USER=spark
-    spark-worker2:
-        image: docker.io/bitnami/spark:3.5
-        networks:
-            - my_network
+            MONGO_INITDB_ROOT_USERNAME: root
+            MONGO_INITDB_ROOT_PASSWORD: example
+
+    mongo-express:
+        image: mongo-express
+        ports:
+            - 8081:8081
         environment:
-            - SPARK_MODE=worker
-            - SPARK_MASTER_URL=spark://spark:7077
-            - SPARK_WORKER_MEMORY=1G
-            - SPARK_WORKER_CORES=1
-            - SPARK_RPC_AUTHENTICATION_ENABLED=no
-            - SPARK_RPC_ENCRYPTION_ENABLED=no
-            - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
-            - SPARK_SSL_ENABLED=no
-            - SPARK_USER=spark
+            ME_CONFIG_MONGODB_ADMINUSERNAME: root
+            ME_CONFIG_MONGODB_ADMINPASSWORD: example
+            ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
